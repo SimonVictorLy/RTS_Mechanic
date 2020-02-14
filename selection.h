@@ -15,7 +15,7 @@ class selection {
     SDL_Rect mBox;
     SDL_Renderer* renderer;
     std::vector<unit*> selected;
-    bool rightButton;
+    bool leftButton;
     LTexture* mTexture;
 };
 

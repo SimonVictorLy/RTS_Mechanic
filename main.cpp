@@ -142,7 +142,8 @@ int main(int argc, char *argv[]){
       gUnits[i]->move();
       gUnits[i]->render(camera);
     }
-
+    
+    mouseSelect.render(camera,false);
 
 
     // Render based on Game State

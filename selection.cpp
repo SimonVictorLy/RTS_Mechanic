@@ -7,7 +7,7 @@ selection::selection(SDL_Renderer* gRenderer, LTexture *texture){
   mBox.w = 1;
   mBox.h = 1;
   
-  rightButton = false;
+  leftButton = false;
   mTexture = texture;
   renderer = gRenderer;
 }
@@ -17,23 +17,55 @@ void selection::handleEvents(SDL_Event& e,unit *gUnits[]){
   // left button down to select
   // mouse location
   // right button to set destination
-  if(e.type == SDL_MOUSEBUTTONDOWN){
-    int x,y;
-    SDL_GetMouseState(&x,&y); // sets destination
+  int x,y;
+  SDL_GetMouseState(&x,&y); // sets destination
+  
+  if(!leftButton){
     mBox.x = x;
     mBox.y = y;
+    mBox.w = 1;
+    mBox.h = 1;
+  }
+  else{
+    mBox.w = x - mBox.x;
+    mBox.h = y - mBox.y;
+  }
+
+  
+  if(e.type == SDL_MOUSEBUTTONDOWN){
     switch(e.button.button){
       case SDL_BUTTON_LEFT:
-        select(gUnits);
+        //printf("LEFT BUTTON PRESSED!\n"); 
+        leftButton = true;
         break;
       case SDL_BUTTON_RIGHT:
         moveSelected();
         break;
     }
   }
+  else if(e.type == SDL_MOUSEBUTTONUP){
+    switch(e.button.button){
+      case SDL_BUTTON_LEFT:
+
+       // printf("LEFT BUTTON RELEASED!\n");
+        // might not work for all cases
+        
+        select(gUnits);
+        leftButton = false;
+        break;
+    }
+  }
 }
 
 void selection::render(SDL_Rect& camera, bool center){
+  if(leftButton){
+    // draw rectangle
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 125);
+    SDL_RenderDrawRect(renderer, &mBox);
+  }
+  else{
+    // do not draw rectangle
+  }
   //SDL_RenderDrawRect(renderer,mBox);
 }
 
@@ -71,6 +103,17 @@ bool selection::CC(SDL_Rect &a, SDL_Rect &b){
 
 void selection::select(unit *gUnits[]){
   selected.clear();
+
+  if(mBox.w <0){
+    mBox.x += mBox.w;
+    mBox.w = -mBox.w;
+  }
+
+  if(mBox.h <0){
+    mBox.y += mBox.h;
+    mBox.h = -mBox.h;
+  }
+
   for(int i = 0; i < 5; i++){
     if(CC(mBox,gUnits[i]->mBox)){
       printf("ADDED SELECTED UNIT %d\n",i);
