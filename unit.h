@@ -1,19 +1,21 @@
 class unit{
 public:
-  unit(LTexture *inTexture);
+  unit(LTexture *inTexture,int unitID, int initX, int initY);
 
-  void move();
+  int id;
+  void move(unit *gUnits[]);
   void setDestination(double x, double y);
   void render(SDL_Rect &camera);
   void handleEvents(SDL_Event &e);
+  bool unitCollides(unit *gUnits[]);
   int getX();
   int getY();
 
 private:
-  SDL_Rect mBox;
+  Circle mCircle;
+
   int destX, destY;
   static const int UNIT_WIDTH = 50;
-  static const int UNIT_HEIGHT = 50;
   double mVel = 10.0;
   LTexture *texture;
 

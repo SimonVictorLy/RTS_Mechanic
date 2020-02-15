@@ -120,8 +120,8 @@ int main(int argc, char *argv[]){
   unit *gUnits[5];
 
   for(int i = 0; i<5;i++){
-    gUnits[i] = new unit(gTextures[TEXTURE_A]);
-    gUnits[i]->setDestination(i*50+100,100);
+    // set texture and unique ID
+    gUnits[i] = new unit(gTextures[TEXTURE_A], i, i*50+50, i*50+50);
   }
 
   while(!quit){ 
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]){
    
     // Update objects
     for(int i = 0; i<5;i++){
-      gUnits[i]->move();
+      gUnits[i]->move(gUnits);
       gUnits[i]->render(camera);
     }
     

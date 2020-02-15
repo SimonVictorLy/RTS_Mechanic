@@ -75,48 +75,25 @@ void selection::moveSelected(){
   }
 }
 
-
-bool selection::CC(SDL_Rect &a, SDL_Rect &b){
-  int leftA, leftB;
-  int rightA, rightB;
-  int topA, topB;
-  int bottomA, bottomB;
-
-  leftA = a.x;
-  rightA = a.x + a.w;
-  topA = a.y;
-  bottomA = a.y + a.h;
-
-  leftB = b.x;
-  rightB = b.x + b.w;
-  topB = b.y;
-  bottomB = b.y + b.h;
-
-  // Check extreme of one side of A exceeds the opposite in B
-  if(bottomA <= topB) return false;
-  if(topA >= bottomB) return false;
-  if(rightA <= leftB) return false;
-  if(leftA >= rightB) return false;
-
-  return true;
-}
-
 void selection::select(unit *gUnits[]){
   selected.clear();
 
+  // mouse is dragged leftwards
   if(mBox.w <0){
     mBox.x += mBox.w;
     mBox.w = -mBox.w;
   }
-
+  // mouse is dragged upwards
   if(mBox.h <0){
     mBox.y += mBox.h;
     mBox.h = -mBox.h;
   }
 
   for(int i = 0; i < 5; i++){
-    if(CC(mBox,gUnits[i]->mBox)){
-      printf("ADDED SELECTED UNIT %d\n",i);
+    if(collisions::checkCollision(gUnits[i]->mCircle,mBox)){
+      printf("ADDED SELECTED UNIT %d: ",i);
+      printf("Circle: x=%d y=%d r=%d\n",gUnits[i]->mCircle.x,gUnits[i]->mCircle.y,gUnits[i]->mCircle.r);
+      printf("Selection: x=%d, y=%d\n",mBox.x,mBox.y);
       selected.push_back(gUnits[i]);
     }
   }

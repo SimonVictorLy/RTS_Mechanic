@@ -1,36 +1,46 @@
 #include "define.h"
 
-unit::unit(LTexture *inTexture){
-  mBox.x = 0;
-  mBox.y = 0;
-  mBox.w = UNIT_WIDTH;
-  mBox.h = UNIT_HEIGHT;  
+unit::unit(LTexture *inTexture, int unitID, int initX, int initY){
+  id = unitID;
+  mCircle.x = initX;  // center
+  mCircle.y = initY;  // center
+  mCircle.r = UNIT_WIDTH/2;
+
   texture = inTexture;
 
-  destX = mBox.x;
-  destY = mBox.y;
+  destX = initX;
+  destY = initY;
 }
 
 
 void unit::setDestination(double x, double y){
-  destX = x - mBox.w/2.0;
-  destY = y - mBox.h/2.0;
+  destX = x;
+  destY = y;
 }
 
 void unit::handleEvents(SDL_Event &e){
 }
 
-void unit::move(){
+bool unit::unitCollides(unit *gUnits[]){
+  for(int i = 0;i<5;i++){
+    if(gUnits[i]->id != id && 
+        collisions::checkCollision(gUnits[i]->mCircle,mCircle)) 
+      return true;
+  } 
+  return false;
+}
+
+void unit::move(unit *gUnits[]){
   // a-star
   // will have to interact with tilemap
   
-  if(destX != mBox.x || destY!=mBox.y){
+  if(destX != mCircle.x || destY!=mCircle.y){
     
-    double mVelx, mVely;
+    int mVelx, mVely;
     double dx, dy, dm;
 
-    dx = destX - mBox.x;
-    dy = destY - mBox.y;
+    dx = destX - mCircle.x;
+    dy = destY - mCircle.y;
     
     dm = std::sqrt(dx*dx+dy*dy);
    
@@ -38,27 +48,38 @@ void unit::move(){
     mVely = mVel*(dy/dm);
     
     // int += float
-    mBox.x += mVelx;
+    mCircle.x += mVelx;
     if(std::abs(dx) < mVel){
-      mBox.x = destX;
+      mCircle.x = destX;
+    }
+ 
+    if(unitCollides(gUnits)){
+      mCircle.x -= mVelx;
     }
 
-    mBox.y += mVely;
+    mCircle.y += mVely;
     if(std::abs(dy) < mVel){
-      mBox.y = destY;
+      mCircle.y = destY;
     }
-
+    
+    if(unitCollides(gUnits)){
+      mCircle.y -= mVely;
+    }
   }
 }
 
 void unit::render(SDL_Rect &camera){
-  texture->render(mBox.x-camera.x, mBox.y-camera.y); 
+
+  int renderX = mCircle.x - mCircle.r;
+  int renderY = mCircle.y - mCircle.r;
+
+  texture->render(renderX-camera.x, renderY-camera.y); 
 }
 
 int unit::getX(){
-  return mBox.x;
+  return mCircle.x;
 }
 
 int unit::getY(){
-  return mBox.y;
+  return mCircle.y;
 }
