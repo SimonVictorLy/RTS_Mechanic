@@ -40,16 +40,16 @@ namespace collisions{
       int cX, cY;
 
       // Find closest x offset
-      if( a.x < b.x ) cX = b.x;
-      else if( a.x > b.x + b.w ) cX = b.x + b.w;
-      else cX = a.x;
+      if( a.x < b.x ) cX = b.x;	// circle a is to the left
+      else if( a.x > b.x + b.w ) cX = b.x + b.w; // circle a is to the right
+      else cX = a.x; // circle a is within the x value of the box
 
       // Find closest y offset
       if( a.y < b.y ) cY = b.y;
       else if( a.y > b.y + b.h ) cY = b.y + b.h;
       else cY = a.y;
 
-      //If the closest point is inside the circle
+      // if the distance sqaured to the center of the circle to the closest point is less than radius squared, then a overlaps with b
       return ( distanceSquared( a.x, a.y, cX, cY ) < a.r * a.r );
   }
 

@@ -91,9 +91,11 @@ void selection::select(unit *gUnits[]){
 
   for(int i = 0; i < 5; i++){
     if(collisions::checkCollision(gUnits[i]->mCircle,mBox)){
+      /*
       printf("ADDED SELECTED UNIT %d: ",i);
       printf("Circle: x=%d y=%d r=%d\n",gUnits[i]->mCircle.x,gUnits[i]->mCircle.y,gUnits[i]->mCircle.r);
       printf("Selection: x=%d, y=%d\n",mBox.x,mBox.y);
+      */
       selected.push_back(gUnits[i]);
     }
   }

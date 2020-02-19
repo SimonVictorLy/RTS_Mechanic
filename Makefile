@@ -2,7 +2,7 @@
 # then the linker will be called -o to link th files
 
 #OBJS specifies which files to compile as part of the project
-OBJS = main.o LTexture.o unit.o selection.o collisions.o
+OBJS = main.o LTexture.o unit.o selection.o collisions.o Tile.o
 
 #CC specifies which compiler we're using
 CC = g++
@@ -26,6 +26,9 @@ main.o: main.cpp
 
 LTexture.o: LTexture.cpp
 	$(CC) -c $(SOURCE)/LTexture.cpp
+
+Tile.o: Tile.cpp
+	$(CC) -c $(SOURCE)/Tile.cpp
 
 unit.o: unit.cpp
 	$(CC) -c $(SOURCE)/unit.cpp

@@ -30,7 +30,19 @@ bool unit::unitCollides(unit *gUnits[]){
   return false;
 }
 
-void unit::move(unit *gUnits[]){
+bool unit::wallCollides(Tile** tiles, int tileCount){
+  for(int i = 0; i < tileCount ;i++){
+    if(tiles[i]->getType()>0){
+      SDL_Rect tile = tiles[i]->getBox();
+      if(collisions::checkCollision(mCircle,tile)){
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+void unit::move(unit *gUnits[],Tile **tiles, int tileCount){
   // a-star
   // will have to interact with tilemap
   
@@ -52,19 +64,18 @@ void unit::move(unit *gUnits[]){
     if(std::abs(dx) < mVel){
       mCircle.x = destX;
     }
- 
-    if(unitCollides(gUnits)){
+    if(unitCollides(gUnits) || wallCollides(tiles,tileCount)){
       mCircle.x -= mVelx;
     }
-
     mCircle.y += mVely;
     if(std::abs(dy) < mVel){
       mCircle.y = destY;
     }
-    
-    if(unitCollides(gUnits)){
+    if(unitCollides(gUnits) || wallCollides(tiles,tileCount)){
       mCircle.y -= mVely;
     }
+
+
   }
 }
 
