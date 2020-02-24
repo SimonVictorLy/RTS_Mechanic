@@ -12,7 +12,7 @@ selection::selection(SDL_Renderer* gRenderer, LTexture *texture){
   renderer = gRenderer;
 }
 
-void selection::handleEvents(SDL_Event& e,unit *gUnits[]){
+void selection::handleEvents(SDL_Event& e,unit *gUnits[], Tile **tiles, int mapX,int mapY){
   // handle mouse inputs
   // left button down to select
   // mouse location
@@ -39,7 +39,7 @@ void selection::handleEvents(SDL_Event& e,unit *gUnits[]){
         leftButton = true;
         break;
       case SDL_BUTTON_RIGHT:
-        moveSelected();
+        moveSelected(tiles,mapX,mapY);
         break;
     }
   }
@@ -69,9 +69,9 @@ void selection::render(SDL_Rect& camera, bool center){
   //SDL_RenderDrawRect(renderer,mBox);
 }
 
-void selection::moveSelected(){
+void selection::moveSelected(Tile **tiles, int mapX, int mapY){
   for(unit *i : selected){
-    i->setDestination(mBox.x,mBox.y);
+    i->setDestination(mBox.x,mBox.y,tiles,mapX,mapY);
   }
 }
 

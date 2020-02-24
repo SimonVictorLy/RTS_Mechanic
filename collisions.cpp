@@ -30,7 +30,8 @@ namespace collisions{
     int totalRadiusSquared = a.r + b.r;
     totalRadiusSquared = totalRadiusSquared * totalRadiusSquared;
 
-
+    // if the distance between the centers c^2
+    // is less than the sum of radii       a^2+b^2
     return distanceSquared( a.x, a.y, b.x, b.y ) < totalRadiusSquared;
   }
 

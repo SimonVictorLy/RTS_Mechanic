@@ -9,9 +9,6 @@ SDL_Renderer* gRenderer = NULL;
 TTF_Font *gFont = NULL;
 SDL_Rect *gTileClips[TOTAL_TILE_SPRITES];
 
-int TOTAL_TILES = 192;
-
-
 int SPAWN_X = 50;
 int SPAWN_Y = 50;
 
@@ -98,7 +95,7 @@ void cleanTiles(Tile** tileSet,int n){
   delete(tileSet); 
 }
 
-Tile** setTiles(int &total_tiles, LTexture *textureMap){
+Tile** setTiles(int &total_tiles,int &mapX, int &mapY, LTexture *textureMap){
   bool tilesLoaded = true;
 
   Tile **tileSet = NULL;
@@ -122,6 +119,8 @@ Tile** setTiles(int &total_tiles, LTexture *textureMap){
   }
 
   total_tiles = TOTAL_X_TILES*TOTAL_Y_TILES;
+  mapX = TOTAL_X_TILES;
+  mapY = TOTAL_Y_TILES;
   // allocate memory for tiles
   tileSet = (Tile**) malloc(sizeof(Tile*)*(TOTAL_X_TILES*TOTAL_Y_TILES)); 
 
@@ -220,9 +219,12 @@ int main(int argc, char *argv[]){
   selection mouseSelect(gRenderer,NULL);
   
   printf("Loading Map...  \t"); 
+  int mapX = 0;
+  int mapY = 0;
   int TOTAL_TILES = 0;
-  Tile** tileSet = setTiles(TOTAL_TILES,gTextures[TEXTURE_B]);
+  Tile** tileSet = setTiles(TOTAL_TILES,mapX,mapY,gTextures[TEXTURE_B]);
   if(!handlePrint(TOTAL_TILES!=0 && tileSet!=NULL)) return 0;
+  printf("Map size %d x %d.\n",mapX,mapY);
 
   unit *gUnits[5];
   for(int i = 0; i<5;i++){
@@ -236,10 +238,10 @@ int main(int argc, char *argv[]){
     while(SDL_PollEvent(&e)!=0){
       if(e.type == SDL_QUIT) quit = true;
       handleInputs(e,state);
-      mouseSelect.handleEvents(e,gUnits);
+      mouseSelect.handleEvents(e,gUnits, tileSet, mapX, mapY);
     }
     
-       // Clear Previous Rendering colors
+    // Clear Previous Rendering colors
     SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF,0xFF,0xFF);  // Background color
     SDL_RenderClear(gRenderer);
    

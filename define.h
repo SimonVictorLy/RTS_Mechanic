@@ -6,14 +6,19 @@
 #include <string>
 #include <fstream>
 #include <stdlib.h> // abs
+#include <math.h>
+#include <queue>
+#include <stack>
+#define PI 3.14159265
 
 #include "mystructs.h"
 #include "collisions.h"
 #include "LTexture.h"
-#include <queue>
 #include "Tile.h"
 #include "unit.h"
 #include "selection.h"
+
+
 
 // Global values
 const int TOTAL_TEXTURES = 4; // Textures
