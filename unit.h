@@ -23,11 +23,10 @@ private:
 
 // A* functions
   bool isValid(int row, int col, int ROW, int COL);
-  bool isUnBlocked(Tile ** tiles, int row, int col, int ROW);
-  bool isDestination(int row, int col, Pair dest); 
-  double calculateHValue(int row, int col, Pair dest);
-  void tracePath(cell **cellDetails, Pair dest);
-
+  bool isUnBlocked(Tile ** tiles, int row, int col, int COL);
+  bool isDestination(int row, int col, Pair destEnd); 
+  double calculateHValue(int row, int col, Pair destEnd);
+  void tracePath(cell **cellDetails,Pair start, Pair destEnd, int ROW, int COL,int tileWidth);
   void aStarSearch(Tile **tiles,  Pair start, Pair destEnd, int ROW, int COL);
   friend class selection;
 };

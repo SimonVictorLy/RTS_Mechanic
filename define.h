@@ -9,6 +9,7 @@
 #include <math.h>
 #include <queue>
 #include <stack>
+#include <set>
 #define PI 3.14159265
 
 #include "mystructs.h"
